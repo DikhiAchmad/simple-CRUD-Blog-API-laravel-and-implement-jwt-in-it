@@ -29,4 +29,15 @@ Route::group([
     Route::post('me', [AuthController::class, 'me']);
 });
 
-Route::get('blog', [BlogPostsController::class, 'index'])->middleware('jwt.verify');
+Route::group([
+
+    'middleware' => 'jwt.verify',
+    'prefix' => 'blog'
+
+], function () {
+    Route::get('/', [BlogPostsController::class, 'index']);
+    Route::get('/{id}', [BlogPostsController::class, 'show']);
+    Route::post('/', [BlogPostsController::class, 'store']);
+    Route::put('/{id}', [BlogPostsController::class, 'update']);
+    Route::delete('{id}', [BlogPostsController::class, 'destroy']);
+});
